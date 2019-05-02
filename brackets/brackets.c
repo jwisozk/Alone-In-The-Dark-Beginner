@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "brackets.h"
+#include "stack.h"
 
-void init(t_stack *stk, char *elem)
+void init(t_stack *stk)
 {
     stk->top = 0;
-    stk->elem = elem;
 }
 
 void push(t_stack *stk, char c)
@@ -47,11 +46,10 @@ char stk_top(t_stack *stk)
 int ft_valid(char *str)
 {
     t_stack stk;
-    char    elem[MAX];
     int     i;
     char    c;
 
-    init (&stk, elem);
+    init (&stk);
     i = 0;
     while (str[i] != '\0')
     {

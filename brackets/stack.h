@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   brackets.h                                         :+:      :+:    :+:   */
+/*   stack.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jwisozk <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BRACKETS_H
-# define BRACKETS_H
+#ifndef STACK_H
+# define STACK_H
 
 # define MAX 1000
 # include <unistd.h>
 typedef struct  s_stack
 {
-    char        *elem;
+    char        elem[MAX];
     int         top;
 }               t_stack;
 
