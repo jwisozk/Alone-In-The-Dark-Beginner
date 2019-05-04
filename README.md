@@ -1,2 +1,2 @@
-# Alone-In-The-Dark-Beginner
+# C-Exam-Alone-In-The-Dark-Beginner
 Exam solution
