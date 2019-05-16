@@ -26,13 +26,10 @@ void push(t_stack *stk, char c)
     }
 }
 
-char pop(t_stack *stk)
+void pop(t_stack *stk)
 {
     if (stk->top > 0)
-    {
         stk->top--;
-        return(stk->elem[stk->top]);
-    }
 }
 
 char stk_top(t_stack *stk)
@@ -80,16 +77,11 @@ int main(int argc, char **argv)
         i = 1;
         while (i < argc)
         {
-            if (ft_valid(argv[i]) != 0)
-            {
+            if (ft_valid(argv[i]) == 0)
+                write(1, "OK\n", 3);
+            else
                 write(1, "Error\n", 6);
-                return (0);
-            }
             i++;
-        }
-        while (i-- > 1)
-        {
-            write(1, "OK\n", 3);
         }
     }
     else
