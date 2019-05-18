@@ -6,11 +6,30 @@
 /*   By: jwisozk <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 14:11:00 by jwisozk           #+#    #+#             */
-/*   Updated: 2019/05/07 19:44:36 by jwisozk          ###   ########.fr       */
+/*   Updated: 2019/05/18 15:19:24 by jwisozk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "list.h"
+
+t_list *ft_newlst(long num)
+{
+	t_list *lst;
+	
+	lst = (t_list*)malloc(sizeof(*lst));
+	lst->num = num;
+	lst->prev = NULL;
+	return (lst);
+}
+
+void ft_addlst(t_list **lst, t_list *tmp)
+{
+	if (tmp != NULL)
+	{
+		tmp->prev = *lst;
+		*lst = tmp;
+	}
+}
 
 int     ft_valid_caracter(char c)
 {
@@ -25,21 +44,26 @@ int     ft_valid_caracter(char c)
     return (0);
 }
 
-int     ft_calc(char c, int a, int b)
+int 	ft_isdigit(char c)
 {
-    int num;
+	if (c >= '0' && c <= '9')
+		return (1);	
+	return (0);
+}
 
+int     ft_calc(char c, long a, long b)
+{
     if (c == '+')
-        num = a + b;
+        return (a + b);
     if (c == '-')
-        num = a - b;
+        return (a - b);
     if (c == '*')
-        num = a * b;
-    if (c == '/')
-        num = a / b;
-    if (c == '%')
-        num = a % b;
-    return (num);
+        return (a * b);
+    if (c == '/' && b != 0)
+        return (a / b);
+    if (c == '%' && b != 0)
+        return (a % b);
+    return (0);
 }
 
 int    ft_is_operator(char c)
@@ -53,104 +77,69 @@ int    ft_is_operator(char c)
     return (0);
 }
 
-int print_error(char *str)
+int ft_search(char *str, t_list **l)
 {
-    printf("%s\n", str);
-    return (0);
-}
+	t_list 	*tmp;
+	t_list 	*lst;
+    int		num;
+	int 	i;
+	long 	a;
+	long 	b;
 
-int ft_get_len_num(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i] >= '0' && str[i] <= '9')
-        i++;
-    return (i);
-}
-
-char *ft_strcpy(char *nstr, char *str , int sign)
-{
-    int i;
-
-    i = 0;
-    if (sign == 1)
+	lst = NULL;
+	i = 0;
+	while (*str != '\0')
     {
-        nstr[i] = '-';
-        i++;
-    }
-    while (*str >= '0' && *str <= '9')
-    {
-        nstr[i] = *str;
-        i++;
-        str++;
-    }
-    nstr[i] = '\0';
-    return (nstr);
+		if (ft_valid_caracter(*str) != 1)
+                return(0);
+        if ((*str == '-' && ft_isdigit(*(str + 1)) == 1) || ft_isdigit(*str) == 1)
+        {
+			num = atoi(str);
+			if ((*str == '-' && num > 0) || (*str != '-' && num < 0))
+				return (0);
+			tmp = ft_newlst(num);
+			ft_addlst(&lst, tmp);
+			while (*str != ' ' && *str != '\0')
+				str++;	
+			i++;
+		} 
+		else if (ft_is_operator(*str) == 1)
+        {
+			if (lst == NULL || lst->prev == NULL)
+				return (0);
+			if (*(str - 1) != ' ' || (*(str + 1) != ' ' && *(str + 1) != '\0'))
+				return (0);
+           	a = lst->prev->num;
+			b = lst->num;
+			if ((*str == '%' || *str == '/') && b == 0)
+				return (0);
+			tmp = lst;
+		   	lst = lst->prev;
+			free(tmp);
+		   	lst->num = ft_calc(*str, a, b);
+			if (lst->num > MAX || lst->num < MIN)
+				return (0);
+		}
+		str++;
+	}
+    if (i == 0 || lst->prev != NULL)
+		return(0);
+	*l = lst;
+	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-    char *str;
     t_list *lst;
-    t_list *tmp;
-    int i;
-    int len;
-    int sign;
-    char *nstr;
-    int t;
-    int op;
-
+    
     if (argc == 2)
     {
-        str = argv[1];
-        lst = NULL;
-        tmp = NULL;
-        sign = 0;
-        i = 0;
-        op = 0;
-        while (str[i] != '\0')
-        {
-            if (ft_valid_caracter(str[i] != 1))
-                return(print_error("Error"));
-            if (str[i] != ' ' && str[i] != '*' && str[i] != '/' && str[i] != '+' && str[i] != '-' && str[i] != '%')
-            {
-                lst = (t_list*)malloc(sizeof(*lst));
-                if (tmp == NULL)
-                    lst->prev = NULL;
-                else
-                    lst->prev = tmp;
-                len = ft_get_len_num(str + i);
-                if (i != 0 && str[i - 1] == '-')
-                    sign = 1;
-                nstr = (char*)malloc(sizeof(*nstr) * (len + sign + 1));
-                nstr = ft_strcpy(nstr, str + i, sign);
-                lst->num = atoi(nstr);
-                tmp = lst;
-                i += len;
-                continue ;
-            }
-            else if ((op = ft_is_operator(str[i])) == 1 && str[i + 1] < '0' && str[i - 1] == ' ')
-            {
-                if (lst == NULL || lst->prev == NULL)
-                    return(print_error("Error"));
-                t = ft_calc(str[i], lst->num, lst->prev->num);
-                if ((lst->num > 0 && lst->prev->num > 0 && t < 0) ||
-                    (lst->num < 0 && lst->prev->num < 0 && t > 0) ||
-                    (str[i] == '*' && t / lst->prev->num != lst->num))
-                    return(print_error("Error"));
-                lst->prev->num = t;
-                lst = lst->prev;
-                free(tmp);
-                tmp = lst;
-            }
-            i++;
-        }
-        if (i == 0 || lst->prev != NULL || op == 0)
-            return(print_error("Error"));
-        printf("%i\n", lst->num);
+		if (ft_search(*(argv + 1), &lst) == 1)
+			printf("%li\n", lst->num);
+		else
+			write(1, "Error\n", 6);
     }
     else
-        print_error("Error");
+        write(1, "Error\n", 6);
     return (0);
 }
