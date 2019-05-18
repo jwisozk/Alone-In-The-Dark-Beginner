@@ -6,13 +6,13 @@
 /*   By: jwisozk <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 12:00:09 by jwisozk           #+#    #+#             */
-/*   Updated: 2019/05/13 13:39:00 by jwisozk          ###   ########.fr       */
+/*   Updated: 2019/05/18 16:15:24 by jwisozk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-int     ft_get_len(long num, int base)
+int     ft_get_len(int num, int base)
 {
     int len;
 
