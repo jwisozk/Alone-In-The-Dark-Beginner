@@ -29,7 +29,6 @@ t_list *ft_get_coord_king(int len, char **argv)
             {
                 lst->i = i;
                 lst->j = j;
-                
             }
             j++;
         }
@@ -121,7 +120,6 @@ int    main(int argc, char **argv)
 {
     if (argc > 1)
     {
-        
         if (ft_check_mate(argc - 1, argv + 1) == 1)
             write(1, "Success\n", 8);
         else
