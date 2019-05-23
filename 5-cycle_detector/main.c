@@ -1,5 +1,16 @@
 #include "list.h"
 
+t_list  *ft_lstnew(int data)
+{
+    t_list *lst;
+    
+    if(!(lst = (t_list*)malloc(sizeof(*lst))))
+        return (NULL);
+    lst->data = data;
+    lst->next = NULL;
+    return (lst);
+}
+
 int main(void)
 {
     t_list *lst1;
@@ -12,7 +23,7 @@ int main(void)
 
     lst1->next = lst2;
     lst2->next = lst3;
-    lst3->next = lst1;
+    lst3->next = lst2;
 
     printf("status = %i\n", cycle_detector(lst1));
     return 0;
