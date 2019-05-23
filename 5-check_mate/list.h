@@ -18,10 +18,8 @@
 
 typedef struct      s_list
 {
-    char            c;
     int             i;
     int             j;
-    struct s_list   *next;
 }                   t_list;
 
 #endif
