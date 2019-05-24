@@ -12,18 +12,24 @@
 
 #include "list.h"
 
+void        ft_assign_value(const t_list **turtle, const t_list **rabbit)
+{
+    if (*rabbit != NULL && (*rabbit)->next != NULL)
+    {
+        *turtle = (*turtle)->next;
+        *rabbit = (*rabbit)->next->next;
+    }
+}
+
 int        cycle_detector(const t_list *list)
 {
-    const t_list  	*tmp;
-    int     		i;
+    const t_list      *turtle;
+    const t_list      *rabbit;
     
-    i = 100;
-    while (list != NULL && i--)
-        list = list->next;
-    tmp = list;
-    if (list != NULL)
-        list = list->next;
-    while (list != NULL && tmp != list)
-        list = list->next;
+    turtle = list;
+    rabbit = list;
+    ft_assign_value(&turtle, &rabbit);
+    while (list != NULL && turtle != rabbit)
+        ft_assign_value(&turtle, &rabbit);
     return (list == NULL ? 0 : 1);
 }
