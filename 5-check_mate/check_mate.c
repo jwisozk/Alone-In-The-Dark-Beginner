@@ -37,10 +37,8 @@ t_list *ft_get_coord_king(int len, char **argv)
     return (lst);
 }
 
-int ft_fn(int x, char s, char f, char c)
+int ft_fn(char s, char f, char c)
 {
-    if (x == 1 && c == 'P')
-        return (1);
     if (c == 'Q' || c == s)
         return (1);
     else if (c == 'P' || c == f)
@@ -73,22 +71,30 @@ int ft_ischeck(t_list *lst, int len, char **argv, int x, int *arr)
     i = lst->i;
     j = lst->j;
     
-    if (arr[0] == 0 && i - x >= 0 && j - x >= 0)
-        arr[0] = ft_fn(x, 'B', 'R', argv[i - x][j - x]);
-    if (arr[1] == 0 && i - x >= 0 && j + x < len)
-        arr[1] = ft_fn(x, 'B', 'R', argv[i - x][j + x]);
-    if (arr[2] == 0 && i + x < len && j - x >= 0)
-        arr[2] = ft_fn(x, 'B', 'R', argv[i + x][j - x]);
-    if (arr[3] == 0 && i + x < len && j + x < len)
-        arr[3] = ft_fn(x, 'B', 'R', argv[i + x][j + x]);
+    if (arr[0] == 0 && i + x < len && j - x >= 0)
+    {
+        if (x == 1 && argv[i + x][j - x] == 'P')
+            return (1);
+        arr[0] = ft_fn('B', 'R', argv[i + x][j - x]);
+    }
+    if (arr[1] == 0 && i + x < len && j + x < len)
+    {
+        if (x == 1 && argv[i + x][j + x] == 'P')
+            return (1);
+        arr[1] = ft_fn('B', 'R', argv[i + x][j + x]);
+    }
+    if (arr[2] == 0 && i - x >= 0 && j - x >= 0)
+        arr[2] = ft_fn('B', 'R', argv[i - x][j - x]);
+    if (arr[3] == 0 && i - x >= 0 && j + x < len)
+        arr[3] = ft_fn('B', 'R', argv[i - x][j + x]);
     if (arr[4] == 0 && j - x >= 0)
-        arr[4] = ft_fn(x, 'R', 'B', argv[i][j - x]);
+        arr[4] = ft_fn('R', 'B', argv[i][j - x]);
     if (arr[5] == 0 && j + x < len)
-        arr[5] = ft_fn(x, 'R', 'B', argv[i][j + x]);
+        arr[5] = ft_fn('R', 'B', argv[i][j + x]);
     if (arr[6] == 0 && i - x >= 0)
-        arr[6] = ft_fn(x, 'R', 'B', argv[i - x][j]);
+        arr[6] = ft_fn('R', 'B', argv[i - x][j]);
     if (arr[7] == 0 && i + x < len)
-        arr[7] = ft_fn(x, 'R', 'B', argv[i + x][j]);
+        arr[7] = ft_fn('R', 'B', argv[i + x][j]);
     if (ft_is_res(arr) == 1)
         return (1);
     else
