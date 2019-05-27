@@ -6,7 +6,7 @@
 /*   By: jwisozk <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/15 16:01:19 by jwisozk           #+#    #+#             */
-/*   Updated: 2019/05/15 18:37:20 by jwisozk          ###   ########.fr       */
+/*   Updated: 2019/05/27 19:06:37 by jwisozk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,37 @@ void    ft_fill_str(char *str)
 
 int     ft_valid_opt(int count, char **argv, char *arr)
 {
-    int i;
-    int j;
+    int 	i;
+    int 	j;
+	char	c;
 
     ft_fill_str(arr);
     i = 0;
     while (i < count)
     {
         j = 0;
+		c = argv[i][j];
         while (argv[i][j] != '\0')
         {
-            if ((j == 0 && argv[i][j] != '-') ||
-                (j > 0 && argv[i][j] < 97) ||
-                (j > 0 && argv[i][j] > 122))
-                return (2);
-            if (argv[i][j] == 'h')
-                return (0);
-            if (argv[i][j] != '-')
-                arr[argv[i][j] - 97] = '1';
+           	if (j == 0 && c != '-')
+			{
+				while (argv[i][j] != ' ' && argv[i][j] != '\0')
+					j++;
+				continue ;
+			}
+			if (j == 0 && c == '-' && argv[i][j + 1] == '\0')
+				return (1);
+			else if (j != 0 && (argv[i][j] < 'a' || argv[i][j] > 'z'))
+				return (1);
+			else if (argv[i][j] == 'h')
+				return (2);
+			else
+				arr[argv[i][j] - 97] = '1';
             j++;
         }
         i++;
     }
-    return (1);
+    return (0);
 }
 
 void    ft_usage(char *s)
@@ -75,7 +83,7 @@ int main(int argc, char **argv)
     int i;
 
     status = ft_valid_opt(argc - 1, argv + 1, arr);
-    if (argc > 1 && status == 1)
+    if (argc > 1 && status == 0)
     {
         i = LEN;
         while (i--)
@@ -86,7 +94,7 @@ int main(int argc, char **argv)
         }
         write(1, "\n", 1);
     }
-    else if (status == 2)
+    else if (status == 1)
     {
         ft_usage("Invalid Option\n");
     }
